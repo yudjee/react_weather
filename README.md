@@ -9,7 +9,7 @@
 * Choose city from list(or find you interested in) and add to main page.
 * Click button to update weather forecast.
 * Delete city card.
-* Choosen cities are saved to LocalStorage
+* Chosen cities are saved to LocalStorage
 
 
 ## Available Scripts
