@@ -3,18 +3,13 @@
 ## Description:
 * City weather cards with short info on the main page.
 * More information about city weather on the new route.
-* Using Axios to get Openweathermap API.
 
 ## Functional:
+* Using Axios to get Openweathermap API.
 * Choose city from list(or find you interested in) and add to main page.
 * Click button to update weather forecast.
 * Delete city card.
 * Choosen cities are saved to LocalStorage
-
-## Rechnologies:
-* React, React-router
-* Axios
-* LocalStorage
 
 
 ## Available Scripts
