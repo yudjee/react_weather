@@ -9,7 +9,7 @@ export default class App extends React.Component {
 
   state = {
     cities: ['London', 'Kharkiv', 'Istanbul'],
-    newCities: ['London', 'Kharkiv', 'Istanbul', 'Tokyo', 'New York', 'Boston', 'Cairo', 'Berlin', 'Marino'],
+    newCities: ['London', 'Kharkiv', 'Istanbul', 'Tokyo', 'New York', 'Berlin', 'Marino'],
     ready: false
   }
 
@@ -33,10 +33,31 @@ export default class App extends React.Component {
     return addCities
   }
 
+  addNewCities = (city) => {
+    if(!this.state.newCities.includes(city)) {
+      const addCities = [...this.state.newCities]
+      addCities.push(city)
+      this.setState({newCities: addCities})
+    }
+  }
+
   showCity = (city) => {
     const cityList = [...this.state.cities]
     cityList.push(city)
     this.setState({cities: cityList})
+  }
+
+  componentDidMount() {
+    if(localStorage.getItem('cities') === null) {
+      localStorage.setItem('cities', this.state.cities)
+    } else {
+      let citiesLS = localStorage.getItem('cities')
+      this.setState({cities: citiesLS.split(",")})
+    }
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem('cities', this.state.cities)
   }
 
 
@@ -55,7 +76,7 @@ export default class App extends React.Component {
                   )
                 }) 
               }
-              <AddCity cities={this.addCitiesList()} showCity={this.showCity}/>
+              <AddCity cities={this.addCitiesList()} showCity={this.showCity} addNewCities={this.addNewCities}/>
             </div> 
               )
             }

@@ -3,7 +3,7 @@ import axios from 'axios'
 import Loader from '../loader/loader.js'
 import './CityWeather.css'
 
-const API_KEY = '093c63d1d6dd2f0f77c6f14d91a19042';
+const API_KEY = '3b2e710fb8e79084a5ff6a9cfd40c62b';
 
 export default class CityWeather extends React.Component { 
 	state = {
@@ -16,14 +16,14 @@ export default class CityWeather extends React.Component {
 
 	updateWeather = () => {
 		axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${this.props.match.params.city}&appid=${API_KEY}`)
-    .then(response => {
-      this.setState({...response.data, isReady: true})
-    })
+    	.then(response => {
+      		this.setState({...response.data, isReady: true})
+    	})
 	}
 
 	componentDidMount() {
-    this.updateWeather()
-  }
+    	this.updateWeather()
+  	}
 
 	render() {
 		console.log(this.state)

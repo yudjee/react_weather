@@ -6,7 +6,7 @@ import './WeatherItem.css'
 import Loader from '../loader/loader.js'
 
 
-const API_KEY = '093c63d1d6dd2f0f77c6f14d91a19042';
+const API_KEY = '3b2e710fb8e79084a5ff6a9cfd40c62b';
 
 export default class WeatherBox extends React.Component {
 
