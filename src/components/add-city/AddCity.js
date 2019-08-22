@@ -21,6 +21,12 @@ export default class AddCity extends React.Component {
 		this.setState({isPlus: true})
 	}
 
+	enterKeyDown = (e) => {
+		if(e.key === 'Enter') {
+			this.onAddCity()
+		}
+	}
+
 	Cities = (city) => {
 		return(
 			<li key={city} className="city-item" onClick={() => this.onCityClick(city)}>{city}</li>
@@ -29,20 +35,20 @@ export default class AddCity extends React.Component {
 
 	onAddCity = () => {
 		axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${this.state.findCityValue}&appid=${API_KEY}`)
-    .then(response => {
-    	this.props.addNewCities(this.state.findCityValue)
-    	this.props.showCity(this.state.findCityValue)
-      this.setState({cityOk: true, findCityValue: ''})
-    })
-    .catch(error => {
-			console.log(error)
-    	this.setState({cityOk: false, findCityValue: ''})
-    })
+	    .then(response => {
+	    	this.props.addNewCities(this.state.findCityValue)
+	    	this.props.showCity(this.state.findCityValue)
+	      this.setState({cityOk: true, findCityValue: ''})
+	    })
+	    .catch(error => {
+				console.log(error)
+	    	this.setState({cityOk: false, findCityValue: ''})
+	    })
 	}
 
 	handleChange = (event) => {
-    this.setState({findCityValue: event.target.value});
-  }
+    	this.setState({findCityValue: event.target.value});
+  	}
 
   componentDidUpdate() {
 		
@@ -61,7 +67,7 @@ export default class AddCity extends React.Component {
 							<input type="text" 
 								placeholder="City name" 
 								className="city-input-field"
-
+								onKeyDown={(event) => this.enterKeyDown(event)}
 								value={this.state.findCityValue}
 								onChange={(event) => this.handleChange(event)}
 							/>

@@ -1,67 +1,69 @@
 import React from 'react';
-import './App.css';
 import {BrowserRouter, Route} from 'react-router-dom'
+import {connect} from 'react-redux';
+
+//components
 import WeatherItem from './components/weather-item/WeatherItem.js'
 import CityWeather from './components/city-weather/CityWeather.js'
 import AddCity from './components/add-city/AddCity.js'
 
-export default class App extends React.Component { 
+//actions
+import {setCities, deleteCity, addCityCard, addNewCity, setNewCities} from './actions'
 
-  state = {
-    cities: ['London', 'Kharkiv', 'Istanbul'],
-    newCities: ['London', 'Kharkiv', 'Istanbul', 'Tokyo', 'New York', 'Berlin', 'Marino'],
-    ready: false
-  }
+import './App.css';
 
-  deleteCity = (city) => {
-    const newCityList = [...this.state.cities];
-    for(let i = 0; i < this.state.cities.length; i++) {
-      if(city === this.state.cities[i]) {
-        newCityList.splice(i, 1)
-      }
-    }
-    this.setState({cities: newCityList})
-  }
+class App extends React.Component { 
 
   addCitiesList = () => {
     const addCities = []
-    for(let c=0; c<this.state.newCities.length; c++) {
-      if(!this.state.cities.includes(this.state.newCities[c])) {
-        addCities.push(this.state.newCities[c])
+    for(let c=0; c<this.props.newCities.length; c++) {
+      if(!this.props.cities.includes(this.props.newCities[c])) {
+        addCities.push(this.props.newCities[c])
       }
     }
     return addCities
   }
 
   addNewCities = (city) => {
-    if(!this.state.newCities.includes(city)) {
-      const addCities = [...this.state.newCities]
-      addCities.push(city)
-      this.setState({newCities: addCities})
+    if(!this.props.newCities.includes(city)) {
+      this.props.addNewCity(city)
     }
   }
 
   showCity = (city) => {
-    const cityList = [...this.state.cities]
-    cityList.push(city)
-    this.setState({cities: cityList})
+    if(!this.props.cities.includes(city)) {
+      this.props.addCityCard(city)
+    }
   }
 
   componentDidMount() {
+    // get cities from LocalStorage
     if(localStorage.getItem('cities') === null) {
-      localStorage.setItem('cities', this.state.cities)
+      localStorage.setItem('cities', this.props.cities)
     } else {
       let citiesLS = localStorage.getItem('cities')
-      this.setState({cities: citiesLS.split(",")})
+      this.props.setCities(citiesLS.split(","))
+    }
+
+    // get newCities from LocalStorage
+    if(localStorage.getItem('newCities') === null) {
+      localStorage.setItem('newCities', this.props.newCities)
+    } else {
+      let newCitiesLS = localStorage.getItem('newCities')
+      this.props.setNewCities(newCitiesLS.split(","))
     }
   }
 
   componentDidUpdate() {
-    localStorage.setItem('cities', this.state.cities)
+    //add to LocalStorage
+    localStorage.setItem('cities', this.props.cities)
+    localStorage.setItem('newCities', this.props.newCities)
   }
 
 
   render() {
+    
+    const { cities, deleteCity } = this.props
     
     return (
       <BrowserRouter>
@@ -70,9 +72,9 @@ export default class App extends React.Component {
             <Route path="/" exact render={() => {
               return(
                  <div className="weather-container">
-              { this.state.cities.map((city) => {
+              { cities.map((city) => {
                   return(
-                    <WeatherItem city={city} key={city} deleteCity={this.deleteCity}/> 
+                    <WeatherItem city={city} key={city} deleteCity={deleteCity}/> 
                   )
                 }) 
               }
@@ -88,3 +90,21 @@ export default class App extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  cities: state.cities,
+  newCities: state.newCities
+})
+
+const mapDispatchToProps = dispatch => ({
+  setCities: (cities) => dispatch(setCities(cities)),
+  deleteCity: (city) => dispatch(deleteCity(city)),
+  addCityCard: (city) => dispatch(addCityCard(city)),
+  addNewCity: (city) => dispatch(addNewCity(city)),
+  setNewCities: (cities) => dispatch(setNewCities(cities)),
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(App);
